@@ -19,6 +19,10 @@ export default function MainMenu() {
         </div>
         <div>
           <i className="fa fa-cog" />
+          <NavLink to="/project" className="ml-4 text-black">Project Management</NavLink>
+        </div>
+        <div>
+          <i className="fa fa-cog" />
           <NavLink to="/createproject" className="ml-4 text-black">Create Project</NavLink>
         </div>
       </div>

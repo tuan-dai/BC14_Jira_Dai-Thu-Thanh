@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 import { Table, Tag } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import FormEditProject from "../Forms/FormEditProject/FormEditProject"
 
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
@@ -61,9 +61,15 @@ export default function Project() {
       dataIndex: "action",
       render: (text, project) => (
         <Fragment>
-          <NavLink to={`/editproject/${project.id}`} className="text-blue-500 text-xl mr-3">
+          <button className="text-blue-500 text-xl mr-3" onClick={() => {
+            const action = {
+              type: 'OPEN_FORM_EDIT_PROJECT',
+              Component: <FormEditProject/>,
+            }
+            dispatch(action)
+          }}>
             <EditOutlined />
-          </NavLink>
+          </button>
           <button
             className="text-red-500 text-xl"
             onClick={() => {

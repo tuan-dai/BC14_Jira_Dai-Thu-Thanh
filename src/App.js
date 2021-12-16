@@ -8,12 +8,14 @@ import MainBoard from "./pages/ProjectManagement/MainBoard/MainBoard";
 import Project from "./pages/ProjectManagement/Project/Project";
 import { UserTemplate } from "./templates/UserTemplate";
 import CreateProject from "./pages/ProjectManagement/CreateProject/CreateProject";
-import EditProject from "./pages/ProjectManagement/EditProject/EditProject";
+// import EditProject from "./pages/ProjectManagement/EditProject/EditProject";
+import PopupProject from "./pages/ProjectManagement/PopupProject/PopupProject"
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <PopupProject />
         <Switch>
           <UserTemplate path="/signin" exact Component={SignIn} />
 
@@ -21,7 +23,7 @@ function App() {
           <JiraTemplate path="/" exact Component={MainBoard} />
           <JiraTemplate path="/project" exact Component={Project} />
           <JiraTemplate path="/createproject" exact Component={CreateProject} />
-          <JiraTemplate path="/editproject/:id" exact Component={EditProject} />
+          {/* <JiraTemplate path="/editproject/:id" exact Component={EditProject} /> */}
         </Switch>
       </BrowserRouter>
     </div>

@@ -1,4 +1,5 @@
 import { DELETEPROJECT } from "../types/deleteProject";
+import { UPDATEPROJECT } from "../types/updateProject";
 import * as ActionType from "../types/getAllProject";
 const initialState = {
   loading: false,
@@ -26,6 +27,17 @@ const getAllProject_Reducer = (state = initialState, action) => {
       state.error = action.payload;
       return { ...state };
     }
+
+    case UPDATEPROJECT: {
+      state.data = state.data.map(project => {
+        if (project.id === action.payload.id) {
+          return action.payload;
+        }
+        return project;
+      });
+      return { ...state };
+    }
+
     case DELETEPROJECT: {
       state.loading = false;
       state.data = action.payload;

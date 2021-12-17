@@ -43,8 +43,9 @@ export default function PopupProject() {
               Cancel
             </Button>
             <Button
-              onClick={() => {
-                callBackSubmit();
+              onClick={(e) => {
+                callBackSubmit(e);
+                onClose();
               }}
               type="primary"
             >

@@ -59,14 +59,25 @@ export default function Project() {
     {
       title: "Action",
       dataIndex: "action",
-      render: (text, project) => (
+      render: (text, record, project) => (
         <Fragment>
           <button className="text-blue-500 text-xl mr-3" onClick={() => {
             const action = {
               type: 'OPEN_FORM_EDIT_PROJECT',
               Component: <FormEditProject/>,
             }
+
+            //dispatch len reducer noi dung trong modal
             dispatch(action)
+
+            //dispatch du lieu hien tai len reducer
+
+            const actionEditProject = {
+              type: 'EDIT_PROJECT',
+              projectEditModel: record
+            }
+
+            dispatch(actionEditProject)
           }}>
             <EditOutlined />
           </button>

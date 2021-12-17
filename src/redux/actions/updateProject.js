@@ -1,5 +1,6 @@
 import api from "../../util/apiUtil";
 import { UPDATEPROJECT } from '../types/updateProject'
+import { getAllProject } from "./getAllProject";
 
 export const updateProject = (projectUpdate) => {
     return (dispatch) => {
@@ -7,7 +8,7 @@ export const updateProject = (projectUpdate) => {
             .put(`Project/updateProject?projectId=${projectUpdate.id}`, projectUpdate)
             .then(result => {
                 dispatch(actUpdateProject(result.data.content))
-                console.log('result', result);
+                dispatch(getAllProject())
             })
             .catch(error => console.log(error))
     }

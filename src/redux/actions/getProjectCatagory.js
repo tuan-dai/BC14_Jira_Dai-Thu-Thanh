@@ -11,6 +11,7 @@ export const getProjectCatagory = () => {
 }
 
 const actProjectCatagory = (data) => {
+    console.log(data)
     return {
         type: PROJECTCATAGORY,
         payload: data

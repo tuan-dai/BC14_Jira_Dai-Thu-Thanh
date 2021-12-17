@@ -1,52 +1,91 @@
-import React, { useEffect, useRef } from "react";
+import { withFormik } from "formik";
+import React, { useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { getProjectCatagory } from "../../../../redux/actions/getProjectCatagory";
+import {updateProject} from "../../../../redux/actions/updateProject"
 
-export default function FormEditProject(props) {
-  const formSubmitRef = useRef(null);
-
+const FormEditProject = (props) => {
+  const projectCatagory = useSelector(
+    (state) => state.ProjectCategory_Reducer.data
+  );
   const dispatch = useDispatch();
-  const submitForm = (e) => {
-    if (e.target) {
-      console.log(e);
-      e.preventDefault();
-      alert("Submit edit");
-    } else {
-        alert("Submit edit");
-        console.log(e)
-    
-    }
-  };
+  const {
+    values,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+  } = props;
 
   //component didmount
   useEffect(() => {
+    dispatch(getProjectCatagory());
+    // dispatch(getDetailProject()) de chi 
+    // cái task nó không có hiểu là task nào á chị giờ phải gọi task truyền lên trên projectReducer xong rồi ở dưới nó có xong nó load ra á chị 
     dispatch({
       type: "SET_SUBMIT_EDIT_PROJECT",
-      submitFunction: () => submitForm(formSubmitRef.current),
+      submitFunction: handleSubmit,
     });
-  }, [formSubmitRef.current]); 
-
-  const handleEditorChange = (content, editor) => {};
+  }, []);
+  const handleEditorChange = (content, editor) => {
+    setFieldValue("description", content);
+  };
+  console.log(values)
 
   return (
-    <form ref={formSubmitRef} className="container-fluid" onSubmit={submitForm}>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.name}
+        name="name"
+      />
+
       <div className="row">
         <div className="col-4">
           <div className="form-group">
             <p className="font-weight-bold">Project ID</p>
-            <input disabled className="form-control" name="id" />
+            <input
+              disabled
+              value={values.id}
+              className="form-control"
+              name="id"
+            />
           </div>
         </div>
         <div className="col-4">
           <div className="form-group">
             <p className="font-weight-bold">Project Name</p>
-            <input className="form-control" name="projectName" />
+            <input
+              onChange={handleChange}
+              value={values.projectName}
+              className="form-control"
+              name="projectName"
+            />
           </div>
         </div>
         <div className="col-4">
           <div className="form-group">
             <p className="font-weight-bold">Project Category</p>
-            <input className="form-control" name="categoryId" />
+            <select
+              value={values.categoryId}
+              className="form-control"
+              name="categoryId"
+            >
+              {projectCatagory?.map((item, index) => {
+                console.log(item)
+                return (
+                  <option key={index} value={item.id}>
+                    {item.projectCategoryName}
+                  </option>
+                );
+              })}
+            </select>
           </div>
         </div>
         <div className="col-12">
@@ -55,7 +94,8 @@ export default function FormEditProject(props) {
             <Editor
               name="descriptionForm"
               apiKey="oodr1y7pw1cde82eu0y44regjnyo4bqsm26jdn88mduewfyn"
-              initialValue=""
+              initialValue={values.description}
+              value = {values.description}
               init={{
                 height: 500,
                 menubar: false,
@@ -70,11 +110,57 @@ export default function FormEditProject(props) {
             alignleft aligncenter alignright | \
             bullist numlist outdent indent | help",
               }}
-              onChange={handleEditorChange}
+              // onChange={handleEditorChange}
             />
           </div>
         </div>
       </div>
+
+      {errors.name && touched.name && <div id="feedback">{errors.name}</div>}
+      {/* <button type="submit">Submit</button> */}
     </form>
   );
-}
+};
+
+const MyEnhancedForm = withFormik({
+  mapPropsToValues: (props) => ({
+    projectName: props.projectEdit.projectName,
+    description: props.projectEdit.description,
+    id: props.projectEdit?.id,
+    categoryId: props.projectEdit.categoryId,
+  }),
+  
+  // Custom sync validation
+  // validate: (values) => {
+  //   const errors = {};
+
+  //   if (!values.name) {
+  //     errors.name = "Required";
+  //   }
+
+  //   return errors;
+  // },
+
+  handleSubmit: (values, { props, setSubmitting }) => {
+
+    props.dispatch(updateProject(values))
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Your have edit project successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    console.log({ values });
+  },
+
+  displayName: "MyEnhancedForm",
+})(FormEditProject);
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    projectEdit: state.projectReducer.projectEdit,
+  };
+};
+export default connect(mapStateToProps)(MyEnhancedForm);

@@ -4,6 +4,7 @@ import userLogin_Reducer from "../redux/reducers/signin";
 import ProjectCategory_Reducer from "./reducers/getProjectCatagory";
 import createProject_Reducer from "./reducers/createProject";
 import {popupReducer} from "./reducers/popupProject";
+import {projectReducer} from "./reducers/projectReducer";
 
 const rootReducer = combineReducers({
   getAllProject_Reducer,
@@ -11,5 +12,6 @@ const rootReducer = combineReducers({
   ProjectCategory_Reducer,
   createProject_Reducer,
   popupReducer,
+  projectReducer,
 });
 export default rootReducer;

@@ -6,10 +6,9 @@ import {
 } from "../../../redux/actions/getAllProject";
 import Swal from "sweetalert2";
 
-
-import { Table, Tag } from "antd";
+import { Table, Tag, Avatar, Popover, Button, AutoComplete } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import FormEditProject from "../Forms/FormEditProject/FormEditProject"
+import FormEditProject from "../Forms/FormEditProject/FormEditProject";
 
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
@@ -55,38 +54,62 @@ export default function Project() {
     {
       title: "Members",
       key: "members",
-      // render: (text, record, index) => (
-      // ),
+      render: (text, record, index) => {
+        return (
+          <div>
+            {record.members?.slice(0, 3).map((member, index) => {
+              return <Avatar key={index} src={member.avatar} />;
+            })}
+            {record.members?.length > 3 ? <Avatar>...</Avatar> : ""}
+
+            <Popover
+              placement="topLeft"
+              title={"Add member"}
+              content={() => {
+                return <AutoComplete style={{width: '100%'}} onSearch={(value) => {
+                  console.log('value', value);
+                }}/>;
+              }}
+              trigger="click"
+            >
+              <Button style={{borderRadius: '50%'}}>+</Button>
+            </Popover>
+          </div>
+        );
+      },
     },
     {
       title: "Action",
       dataIndex: "action",
       render: (text, record, project) => (
         <Fragment>
-          <button className="text-blue-500 text-xl mr-3" onClick={() => {
-            const action = {
-              type: 'OPEN_FORM_EDIT_PROJECT',
-              Component: <FormEditProject/>,
-            }
+          <button
+            className="text-blue-500 text-xl mr-3"
+            onClick={() => {
+              const action = {
+                type: "OPEN_FORM_EDIT_PROJECT",
+                Component: <FormEditProject />,
+              };
 
-            //dispatch len reducer noi dung trong modal
-            dispatch(action)
+              //dispatch len reducer noi dung trong modal
+              dispatch(action);
 
-            //dispatch du lieu hien tai len reducer
+              //dispatch du lieu hien tai len reducer
 
-            const actionEditProject = {
-              type: 'EDIT_PROJECT',
-              projectEditModel: record
-            }
+              const actionEditProject = {
+                type: "EDIT_PROJECT",
+                projectEditModel: record,
+              };
 
-            dispatch(actionEditProject)
-          }}>
+              dispatch(actionEditProject);
+            }}
+          >
             <EditOutlined />
           </button>
           <button
             className="text-red-500 text-xl"
             onClick={() => {
-              delete_Project(record.id)
+              delete_Project(record.id);
             }}
           >
             <DeleteOutlined />
@@ -97,7 +120,7 @@ export default function Project() {
   ];
 
   const data = dataProject;
-  console.log(data)
+  console.log(data);
 
   function onChange(pagination, sorter, extra) {
     console.log("params", pagination, sorter, extra);
@@ -115,11 +138,10 @@ export default function Project() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteProject(id))
+        dispatch(deleteProject(id));
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
-
   };
 
   return (

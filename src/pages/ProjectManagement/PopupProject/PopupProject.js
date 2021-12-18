@@ -1,16 +1,8 @@
 import React from "react";
 import {
   Drawer,
-  Form,
   Button,
-  Col,
-  Row,
-  Input,
-  Select,
-  DatePicker,
-  Space,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function PopupProject() {

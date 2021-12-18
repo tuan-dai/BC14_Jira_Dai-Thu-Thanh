@@ -36,7 +36,7 @@ export default function Project() {
       },
     },
     {
-      title: "Catagory",
+      title: "Category",
       dataIndex: "categoryName",
       sorter: {
         compare: (a, b) => a.categoryName.localeCompare(b.categoryName),
@@ -53,8 +53,10 @@ export default function Project() {
       ),
     },
     {
-      title: "Member",
-      dataIndex: "member",
+      title: "Members",
+      key: "members",
+      // render: (text, record, index) => (
+      // ),
     },
     {
       title: "Action",
@@ -84,7 +86,7 @@ export default function Project() {
           <button
             className="text-red-500 text-xl"
             onClick={() => {
-              delete_Project(project.id);
+              delete_Project(record.id)
             }}
           >
             <DeleteOutlined />

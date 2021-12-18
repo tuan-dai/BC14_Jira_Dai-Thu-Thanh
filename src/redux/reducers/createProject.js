@@ -1,4 +1,3 @@
-import { bindActionCreators } from "redux";
 import { CREATEPROJECT } from "../types/createProject";
 
 const initialState = {

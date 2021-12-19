@@ -13,5 +13,6 @@ const rootReducer = combineReducers({
   createProject_Reducer,
   popupReducer,
   projectReducer,
+  
 });
 export default rootReducer;

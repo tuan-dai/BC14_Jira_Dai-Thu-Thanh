@@ -1,10 +1,12 @@
 import { DELETEPROJECT } from "../types/deleteProject";
 import { UPDATEPROJECT } from "../types/updateProject";
+import { GETUSER } from "../types/getUser";
 import * as ActionType from "../types/getAllProject";
 const initialState = {
   loading: false,
   data: null,
   error: null,
+  userSearch: [],
 };
 
 const getAllProject_Reducer = (state = initialState, action) => {
@@ -25,6 +27,12 @@ const getAllProject_Reducer = (state = initialState, action) => {
       state.loading = false;
       state.data = null;
       state.error = action.payload;
+      return { ...state };
+    }
+
+    case GETUSER: {
+      state.userSearch = action.payload;
+      console.log("StateUser", state);
       return { ...state };
     }
 

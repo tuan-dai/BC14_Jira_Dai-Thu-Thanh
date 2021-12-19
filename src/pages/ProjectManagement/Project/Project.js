@@ -1,9 +1,10 @@
-import { Fragment, React, useEffect } from "react";
+import { Fragment, React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllProject,
   deleteProject,
 } from "../../../redux/actions/getAllProject";
+// import { getUser } from "../../../redux/actions/getUser";
 import Swal from "sweetalert2";
 
 import { Table, Tag, Avatar, Popover, Button, AutoComplete } from "antd";
@@ -13,6 +14,8 @@ import FormEditProject from "../Forms/FormEditProject/FormEditProject";
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
   const loading = useSelector((state) => state.getAllProject_Reducer.loading);
+  const userSearch = useSelector((state) => state.getAllProject_Reducer.userSearch);
+  const [value, setValue] = useState('');
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -66,8 +69,32 @@ export default function Project() {
               placement="topLeft"
               title={"Add member"}
               content={() => {
-                return <AutoComplete style={{width: '100%'}} onSearch={(value) => {
-                  console.log('value', value);
+                return <AutoComplete 
+                options={userSearch?.map((user, index) =>{
+                  return {label: user.name, value: user.userId.toString()}
+                })}
+                value={value}
+                onChange={(text) => {
+                  setValue(text);
+                }}
+                onSelect={(valueSelect, option) => {
+                  //set gia tri cua hop thoai = option.label
+                  setValue(option.label);
+
+                  dispatch({
+                    type:'ADDUSERPROJECT',
+                    userProject: {
+                      "projectId": record.id,
+                      "userId": valueSelect
+                    }
+                  })
+
+                }}
+                style={{width: '100%'}} onSearch={(value) => {
+                  dispatch({
+                    type: 'GETUSER',
+                    idProject: value
+                  })
                 }}/>;
               }}
               trigger="click"

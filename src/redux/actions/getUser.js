@@ -5,7 +5,7 @@ import api from "../../util/apiUtil";
 export const getUser = (idProject) => {
   return (dispatch) => {
     api
-      .get(`Users/getUserByProjectId?idProject=${idProject}`)
+      .get(`Users/getUser`)
       .then((result) => {
         dispatch(actGetUser(result.data.content));
       })

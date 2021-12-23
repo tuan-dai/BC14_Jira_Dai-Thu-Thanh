@@ -4,23 +4,43 @@ import {
   getAllProject,
   deleteProject,
 } from "../../../redux/actions/getAllProject";
-// import { getUser } from "../../../redux/actions/getUser";
 import Swal from "sweetalert2";
 
 import { Table, Tag, Avatar, Popover, Button, AutoComplete } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import FormEditProject from "../Forms/FormEditProject/FormEditProject";
+import { assignUserProject, getUser } from "../../../redux/actions/getUser";
+const mockVal = (str, repeat) => ({
+  value: str.repeat(repeat),
+});
 
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
   const loading = useSelector((state) => state.getAllProject_Reducer.loading);
-  const userSearch = useSelector((state) => state.getAllProject_Reducer.userSearch);
-  const [value, setValue] = useState('');
+  const userSearch = useSelector(
+    (state) => state.getAllProject_Reducer.userSearch
+  );
+  const [value, setValue] = useState("");
+  const [options, setOptions] = useState(userSearch);
+  const onSearch = (searchText) => {
+    setOptions(
+      userSearch.filter((user) => user.name.indexOf(searchText) !== -1)
+    );
+  };
+
+  const onChange = (data) => {
+    setValue(data);
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllProject());
+    dispatch(getUser());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setOptions(userSearch);
+  }, [userSearch]);
 
   const columns = [
     {
@@ -68,38 +88,40 @@ export default function Project() {
             <Popover
               placement="topLeft"
               title={"Add member"}
+              onVisibleChange={() => setValue("")}
+
               content={() => {
-                return <AutoComplete 
-                options={userSearch?.map((user, index) =>{
-                  return {label: user.name, value: user.userId.toString()}
-                })}
-                value={value}
-                onChange={(text) => {
-                  setValue(text);
-                }}
-                onSelect={(valueSelect, option) => {
-                  //set gia tri cua hop thoai = option.label
-                  setValue(option.label);
-
-                  dispatch({
-                    type:'ADDUSERPROJECT',
-                    userProject: {
-                      "projectId": record.id,
-                      "userId": valueSelect
-                    }
-                  })
-
-                }}
-                style={{width: '100%'}} onSearch={(value) => {
-                  dispatch({
-                    type: 'GETUSER',
-                    idProject: value
-                  })
-                }}/>;
+                return (
+                  <AutoComplete
+                    options={options.map((user, index) => {
+                      return {
+                        value: user.userId.toString(),
+                        label: user.name,
+                      };
+                    })}
+                    value={console.log(value) || value}
+                    onChange={(data) => {
+                      
+                      setValue(data);
+                    }}
+                    onSelect={(data,value) => {
+                      
+                      setValue("");
+                      dispatch(
+                        assignUserProject({
+                          projectId: record.id,
+                          userId: data,
+                        })
+                      );
+                    }}
+                    style={{ width: "100%" }}
+                    onSearch={onSearch}
+                  />
+                );
               }}
               trigger="click"
             >
-              <Button style={{borderRadius: '50%'}}>+</Button>
+              <Button style={{ borderRadius: "50%" }}>+</Button>
             </Popover>
           </div>
         );
@@ -148,10 +170,6 @@ export default function Project() {
 
   const data = dataProject;
   console.log(data);
-
-  function onChange(pagination, sorter, extra) {
-    console.log("params", pagination, sorter, extra);
-  }
 
   //DELETE PROJECT
   const delete_Project = (id) => {

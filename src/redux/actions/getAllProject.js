@@ -24,6 +24,7 @@ export const deleteProject = (id) => {
   };
 };
 
+
 const actGetAllProject_Request = () => {
   return {
     type: ActionType.GETALLPROJECT_REQUEST,
@@ -50,3 +51,5 @@ const actDeleteProject = (project) => {
     payload: project,
   };
 };
+
+

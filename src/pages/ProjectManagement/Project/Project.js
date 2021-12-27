@@ -9,14 +9,14 @@ import Swal from "sweetalert2";
 import { Table, Tag, Avatar, Popover, Button, AutoComplete } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import FormEditProject from "../Forms/FormEditProject/FormEditProject";
-import { assignUserProject, getUser } from "../../../redux/actions/getUser";
-const mockVal = (str, repeat) => ({
-  value: str.repeat(repeat),
-});
+import { assignUserProject, getUser, deleteUserProject } from "../../../redux/actions/getUser";
+// const mockVal = (str, repeat) => ({
+//   value: str.repeat(repeat),
+// });
 
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
-  const loading = useSelector((state) => state.getAllProject_Reducer.loading);
+  // const loading = useSelector((state) => state.getAllProject_Reducer.loading);
   const userSearch = useSelector(
     (state) => state.getAllProject_Reducer.userSearch
   );
@@ -81,7 +81,65 @@ export default function Project() {
         return (
           <div>
             {record.members?.slice(0, 3).map((member, index) => {
-              return <Avatar key={index} src={member.avatar} />;
+              return (
+                <Popover
+                  key={index}
+                  placement="top"
+                  title={"Members"}
+                  content={() => {
+                    return (
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                            <th>Thao tác</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {record.members?.map((item, index) => {
+                            return (
+                              <tr key="index">
+                                <td>{item.userId}</td>
+                                <td>
+                                  <img
+                                    src={item.avatar}
+                                    width="30"
+                                    height="50"
+                                    style={{ borderRadius: "15px" }}
+                                    alt=""
+                                  />
+                                </td>
+                                <td>{item.name}</td>
+                                <td>
+                                  <button
+                                    onClick={() => {
+                                      dispatch(
+                                        deleteUserProject({
+                                          projectId: record.id,
+                                          userId: item.userId,
+                                        })
+                                      );
+                                    }}
+                                    className="btn btn-danger"
+                                    style={{ borderRadius: "50%" }}
+                                  >
+                                    <DeleteOutlined />
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    );
+                  }}
+                >
+                  <Avatar key={index} src={member.avatar} />
+                </Popover>
+              );
             })}
             {record.members?.length > 3 ? <Avatar>...</Avatar> : ""}
 
@@ -89,7 +147,6 @@ export default function Project() {
               placement="topLeft"
               title={"Add member"}
               onVisibleChange={() => setValue("")}
-
               content={() => {
                 return (
                   <AutoComplete
@@ -101,11 +158,9 @@ export default function Project() {
                     })}
                     value={console.log(value) || value}
                     onChange={(data) => {
-                      
                       setValue(data);
                     }}
-                    onSelect={(data,value) => {
-                      
+                    onSelect={(data, value) => {
                       setValue("");
                       dispatch(
                         assignUserProject({

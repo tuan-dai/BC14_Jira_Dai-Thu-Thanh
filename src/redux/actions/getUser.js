@@ -1,5 +1,6 @@
 import { GETUSER, ADDUSERPROJECT } from "../types/getUser";
 import { getAllProject } from "./getAllProject";
+import { DELETEUSERPROJECT } from "../types/deleteUserProject";
 import api from "../../util/apiUtil";
 
 export const getUser = (idProject) => {
@@ -25,6 +26,18 @@ export const assignUserProject = (userProject) => {
   };
 };
 
+export const deleteUserProject = (userProject) => {
+  return (dispatch) => {
+    api
+      .post(`Project/removeUserFromProject`, userProject)
+      .then((result) => {
+        dispatch(actDeleteUserProject(result.data.content));
+        dispatch(getAllProject())
+      })
+      .catch((error) => console.log(error));
+  };
+};
+
 const actGetUser = (user) => {
   return {
     type: GETUSER,
@@ -35,6 +48,13 @@ const actGetUser = (user) => {
 const actAddUserProject = (user) => {
   return {
     type: ADDUSERPROJECT,
+    payload: user,
+  };
+};
+
+const actDeleteUserProject = (user) => {
+  return {
+    type: DELETEUSERPROJECT,
     payload: user,
   };
 };

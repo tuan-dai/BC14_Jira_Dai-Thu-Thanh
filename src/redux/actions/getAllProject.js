@@ -13,16 +13,6 @@ export const getAllProject = () => {
   };
 };
 
-//GET PROJECT DETAIL
-export const getProjectDetail = (id) => {
-  return (dispatch) => {
-    dispatch(actGetProjectDetail_Request());
-    api
-      .get(`Project/getProjectDetail?id=${id}`)
-      .then((result) => dispatch(actGetProjectDetail_Success(result.data.content)))
-      .catch((error) => dispatch(actGetProjectDetail_Error(error)));
-  };
-};
 
 // CREATE PROJECT
 export const createProject = (project, history) => {
@@ -39,10 +29,10 @@ export const createProject = (project, history) => {
 }
 
 // EDIT PROJECT
-export const editProject = (project) => {
+export const editProject = (id, project, history) => {
   return (dispatch) => {
     api
-      .put('Project/updateProject', project)
+      .put(`Project/updateProject?projectId=${id}`, project)
       .then(result => {
         Swal.fire({
           position: "center",
@@ -53,6 +43,7 @@ export const editProject = (project) => {
         });
         dispatch(actEditProject(result.data.content.content))
         dispatch(getAllProject())
+        history.push('/project')
       })
       .catch(error => Swal.fire({
         icon: "error",
@@ -78,6 +69,7 @@ export const deleteProject = (id) => {
       }));
   };
 };
+
 
 // REMOVE USER FROM PROJECT
 export const removeUserFromProject = (project) => {
@@ -129,26 +121,6 @@ const actGetAllProject_Success = (data) => {
 const actGetAllProject_Error = (error) => {
   return {
     type: ActionType.GETALLPROJECT_ERROR,
-    payload: error,
-  };
-};
-
-const actGetProjectDetail_Request = () => {
-  return {
-    type: ActionType.GETPROJECTDETAIL_REQUEST,
-  };
-};
-
-const actGetProjectDetail_Success = (data) => {
-  return {
-    type: ActionType.GETPROJECTDETAIL_SUCCESS,
-    payload: data,
-  };
-};
-
-const actGetProjectDetail_Error = (error) => {
-  return {
-    type: ActionType.GETPROJECTDETAIL_ERROR,
     payload: error,
   };
 };

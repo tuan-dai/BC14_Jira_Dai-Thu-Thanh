@@ -31,7 +31,7 @@ export default function MainMenu() {
 
         <div className="relative flex items-center rounded-sm hover:bg-gray-200 py-2 ">
           <span className="pl-2 text-left"><i className="fa fa-user"></i></span>
-          <NavLink className='absolute left-9 text-black  hover:text-black' to="/usermanagement">
+          <NavLink className='absolute left-9 text-black  hover:text-black' to="/user-management">
             User Management
           </NavLink>
         </div>

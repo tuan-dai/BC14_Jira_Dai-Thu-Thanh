@@ -69,7 +69,7 @@ export const editUser = (user, history) => {
           timer: 1500,
         });
         dispatch(actEditUser(result.data.content.content));
-        setTimeout(() => history.push("/usermanagement"), 2000);
+        setTimeout(() => history.push("/user-management"), 2000);
       })
       .catch((error) => console.log(error));
   };

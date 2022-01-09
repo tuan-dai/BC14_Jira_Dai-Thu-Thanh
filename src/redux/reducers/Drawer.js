@@ -5,14 +5,14 @@ const initialState = {
 
 const Drawer_Reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SHOW_DRAWER": {
-      return { ...state, visible: true, project: action.project };
+    case 'SHOW_DRAWER': {
+      return { ...state, visible: true, project: action.payload }
     }
-    case "CLOSE_DRAWER": {
+    case 'CLOSE_DRAWER': {
       return { ...state, visible: false };
     }
     default:
       return { ...state };
   }
-};
+}
 export default Drawer_Reducer;

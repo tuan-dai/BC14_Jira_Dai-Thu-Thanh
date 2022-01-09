@@ -9,16 +9,14 @@ import {
 import Swal from "sweetalert2";
 import Loading from "../../../_component/Loading/Loading";
 
-import { Table, Tag, Popover, Button, AutoComplete, Avatar } from "antd";
+import { Table, Tag, Avatar, Popover, Button, AutoComplete, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import EditProject from "../EditProject/EditProject";
+import FormEditProject from "../Forms/FormEditProject/FormEditProject";
 import { getListUser, searchUser } from "../../../redux/actions/User";
+import { NavLink } from "react-router-dom";
+import { SEARCHPROJECT } from "../../../redux/types/Project";
 
 export default function Project() {
-  const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
-  const loading = useSelector((state) => state.getAllProject_Reducer.loading);
-  const { listUser } = useSelector((state) => state.getListUser_Reducer);
-
   const [value, setState] = useState("");
 
   const dispatch = useDispatch();
@@ -27,7 +25,30 @@ export default function Project() {
     dispatch(getListUser());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const { listProject, loading, keyword } = useSelector((state) => state.getAllProject_Reducer);
+  const { listUser } = useSelector((state) => state.getListUser_Reducer);
+
+  const { Search } = Input;
+
+  // const [options, setOptions] = useState(userSearch);
+  // const onSearch = (searchText) => {
+  //   setOptions(
+  //     userSearch.filter((user) => user.name.indexOf(searchText) !== -1)
+  //   );
+  // };
+
+  // const onChange = (data) => {
+  //   setValue(data);
+  // };
+
+  // useEffect(() => {
+  //   setOptions(userSearch);
+  // }, [userSearch]);
+
   //TABLE
+  const newArr = listProject?.filter(project => project?.projectName?.toLowerCase().indexOf(keyword.toLowerCase()) !== -1)
+  const data = newArr
+
   const columns = [
     {
       title: "ID",
@@ -42,16 +63,14 @@ export default function Project() {
       sorter: {
         compare: (a, b) => a.projectName.localeCompare(b.projectName),
       },
-      render: (text, project) => (
-        <a href={`/projectdetail/${project?.id}`}>{project?.projectName}</a>
-      ),
     },
     {
-      title: "Catagory",
+      title: "Category",
       dataIndex: "categoryName",
       sorter: {
         compare: (a, b) => a.categoryName.localeCompare(b.categoryName),
       },
+      responsive: ['sm']
     },
     {
       title: "Creator",
@@ -62,109 +81,99 @@ export default function Project() {
       render: (text, project) => (
         <Tag color="volcano">{project?.creator?.name}</Tag>
       ),
+      responsive: ['sm']
     },
     {
-      title: "Member",
-      key: "member",
-      render: (text, project) => (
-        <div>
-          {project?.members?.slice(0, 3).map((member) => {
-            return (
-              <Popover
-                key={member.userId}
-                placement="bottom"
-                title="Members"
-                content={() => {
-                  return (
-                    <Fragment>
+      title: "Members",
+      key: "members",
+      render: (text, project, index) => {
+        return (
+          <div>
+            {project?.members?.slice(0, 3).map((member, index) => {
+              return (
+                <Popover
+                  key={index}
+                  placement="bottom"
+                  title={"Members"}
+                  content={() => {
+                    return (
                       <table className="table table-borderless">
                         <thead>
                           <tr>
                             <th>ID</th>
                             <th>Avatar</th>
                             <th>Name</th>
+                            <th>Thao tác</th>
+
                           </tr>
                         </thead>
                         <tbody>
-                          {project?.members?.map((member) => {
+                          {project?.members?.map((item, index) => {
                             return (
-                              <tr key={member.userId}>
-                                <td>{member.userId}</td>
+                              <tr key={index}>
+                                <td>{item.userId}</td>
                                 <td>
-                                  <Avatar src={member.avatar} />
+                                  <Avatar src={item.avatar} />
                                 </td>
-                                <td>{member.name}</td>
+                                <td>{item.name}</td>
                                 <td>
                                   <Button
-                                    type="primary"
-                                    danger
-                                    shape="circle"
+                                    type="primary" danger shape="circle"
                                     onClick={() => {
-                                      dispatch(
-                                        removeUserFromProject({
-                                          projectId: project?.id,
-                                          userId: member?.userId,
-                                        })
-                                      );
+                                      dispatch(removeUserFromProject({
+                                        projectId: project?.id,
+                                        userId: member?.userId,
+                                      }));
                                     }}
-                                  >
-                                    X
-                                  </Button>
+                                  >X</Button>
                                 </td>
                               </tr>
                             );
                           })}
                         </tbody>
                       </table>
-                    </Fragment>
-                  );
-                }}
-                trigger="hover"
-              >
-                <Avatar className="mr-1" src={member.avatar} />
-              </Popover>
-            );
-          })}
-          {project?.members?.length > 3 ? (
-            <Avatar className="mr-1">...</Avatar>
-          ) : (
-            ""
-          )}
-          <Popover
-            placement="rightTop"
-            title="Add User"
-            content={() => {
-              return (
-                <AutoComplete
-                  style={{ width: 200 }}
-                  value={value}
-                  onSearch={(value) => {
-                    dispatch(searchUser(value));
-                  }}
-                  options={listUser?.map((user) => {
-                    return { label: user.name, value: user.userId.toString() };
-                  })}
-                  onChange={(value) => setState(value)}
-                  onSelect={(value, option) => {
-                    setState(option.label);
-                    dispatch(
-                      assignUserProject({
-                        projectId: project?.id,
-                        userId: JSON.parse(value),
-                      })
                     );
                   }}
-                />
+                >
+                  <Avatar className="mr-1" key={index} src={member.avatar} />
+                </Popover>
               );
-            }}
-            trigger="click"
-          >
-            <Button type="primary" shape="circle">
-              +
-            </Button>
-          </Popover>
-        </div>
-      ),
+            })}
+            {project?.members?.length > 3 ? <Avatar className="mr-1">...</Avatar> : ""}
+
+            <Popover
+              placement="rightTop"
+              title={"Add member"}
+              content={() => {
+                return (
+                  <AutoComplete
+                    style={{ width: 200 }}
+                    value={value}
+                    onSearch={(value) => {
+                      dispatch(searchUser(value))
+                    }}
+                    options={listUser?.map((user) => {
+                      return { label: user.name, value: user.userId.toString() };
+                    })}
+                    onChange={(value) => setState(value)}
+                    onSelect={(value, option) => {
+                      setState(option.label);
+                      dispatch(
+                        assignUserProject({
+                          projectId: project?.id,
+                          userId: Number(value),
+                        })
+                      );
+                    }}
+                  />
+                );
+              }}
+              trigger="click">
+              <Button type="primary" shape="circle">+</Button>
+            </Popover>
+          </div>
+        );
+      },
     },
     {
       title: "Action",
@@ -172,15 +181,14 @@ export default function Project() {
       render: (text, project) => (
         <Fragment>
           <button
-            className="text-blue-500 text-xl mr-3"
-            onClick={() => {
-              showDrawer(project);
-            }}
+            type="button"
+            className="text-blue-500 text-xl mr-3 focus:outline-none"
+            onClick={() => dispatch({ type: 'SHOW_DRAWER', payload: project })}
           >
             <EditOutlined />
           </button>
           <button
-            className="text-red-500 text-xl"
+            className="text-red-500 text-xl focus:outline-none"
             onClick={() => {
               delete_Project(project.id);
             }}
@@ -192,11 +200,6 @@ export default function Project() {
     },
   ];
 
-  const data = dataProject;
-
-  function onChange(pagination, sorter, extra) {
-    console.log("params", pagination, sorter, extra);
-  }
 
   //DELETE PROJECT
   const delete_Project = (id) => {
@@ -216,16 +219,24 @@ export default function Project() {
     });
   };
 
-  const showDrawer = (project) => {
-    dispatch({ type: "SHOW_DRAWER", project });
-  };
-
   return (
     <div className="container-fluid project p-5 md:ml-14 lg:ml-80">
       {loading ? <Loading /> : ""}
-      <p className="text-3xl font-medium">Project Management</p>
-      <Table columns={columns} dataSource={data} onChange={onChange} />
-      <EditProject />
+      <p className="text-3xl font-bold">Project Management</p>
+      <Search
+        className="mb-4"
+        placeholder="input project name"
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={value => dispatch({
+          type: SEARCHPROJECT,
+          value
+        })}
+      />
+
+      <Table columns={columns} dataSource={data} />
+      <FormEditProject />
     </div>
   );
 }

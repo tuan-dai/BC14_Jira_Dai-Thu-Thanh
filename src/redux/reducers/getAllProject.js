@@ -1,5 +1,4 @@
-import { DELETEPROJECT } from "../types/deleteProject";
-import * as ActionType from "../types/getAllProject";
+import * as ActionType from "../types/Project";
 const initialState = {
   loading: false,
   data: null,
@@ -26,11 +25,53 @@ const getAllProject_Reducer = (state = initialState, action) => {
       state.error = action.payload;
       return { ...state };
     }
-    case DELETEPROJECT: {
+    case ActionType.GETPROJECTDETAIL_REQUEST: {
+      state.loading = true;
+      state.data = null;
+      state.error = null;
+      return { ...state };
+    }
+    case ActionType.GETPROJECTDETAIL_SUCCESS: {
       state.loading = false;
       state.data = action.payload;
       state.error = null;
       return { ...state };
+    }
+    case ActionType.GETPROJECTDETAIL_ERROR: {
+      state.loading = false;
+      state.data = null;
+      state.error = action.payload;
+      return { ...state };
+    }
+
+    case ActionType.CREATEPROJECT: {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = null;
+      return { ...state };
+    }
+    case ActionType.EDITPROJECT: {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = null;
+      return { ...state };
+    }
+
+    case ActionType.DELETEPROJECT: {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = null;
+      return { ...state };
+    }
+
+    case ActionType.REMOVE_USERPROJECT: {
+      state.data = action.payload
+      return { ...state }
+    }
+
+    case ActionType.ASSIGN_USERPROJECT: {
+      state.data = action.payload
+      return { ...state }
     }
 
     default:

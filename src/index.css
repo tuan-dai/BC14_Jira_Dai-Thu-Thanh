@@ -2,109 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+
 html body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 
-/* SIDEBAR - MENU CSS */
+/* JIRA */
 .jira {
   height: 100vh;
-  font-family: "Roboto", sans-serif;
   font-weight: 300;
   display: flex;
 }
 
 /* Sider Bar */
 .sideBar {
-  position: fixed;
-  height: 100vh;
-  z-index: 10;
-  background-color: #065fd4;
-  width: 4%;
-  transition: 0.2s;
+    z-index: 100;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    overflow-x: hidden;
+    height: 100vh;
+    width: 4.5rem;
+    background: rgb(7, 71, 166);
+    transition: all 0.1s ease 0s;
+    transform: translateZ(0px);
 }
 
 .sideBar:hover {
-  width: 15%;
+  width: 12rem;
 }
-
-.sideBar:hover .sideBar-top .sideBar-icon:first-child {
-  padding: 0 40%;
-}
-
-.sideBar:hover .sideBar-top .sideBar-icon:not(:first-child) {
-  padding: 0;
-  padding-left: 5%;
-}
-
-.sideBar:hover .sideBar-top .sideBar-icon:not(:first-child) .title {
+.sideBar:hover .sideBar-icon .title {
   opacity: 1;
-  color: white;
-  font-weight: 500;
-}
-
-.sideBar:hover .sideBar-top .sideBar-icon:not(:first-child) .svg-inline--fa {
-  margin-right: 10px;
-}
-
-.sideBar:hover .sideBar-bottom {
-  left: 0%;
-  width: 100%;
-}
-
-.sideBar:hover .sideBar-bottom .svg-inline--fa {
-  margin-right: 10px;
-}
-
-.sideBar:hover .sideBar-bottom .title {
-  opacity: 1;
-  color: white;
-  font-weight: 500;
-}
-
-.sideBar .sideBar-icon {
-  margin-bottom: 20%;
-}
-
-.sideBar .sideBar-icon .svg-inline--fa {
-  color: white;
+  font-size: 14px !important;
 }
 
 .sideBar .sideBar-icon .title {
   opacity: 0;
+  font-size: 8px;
+  overflow: hidden;
 }
 
-.sideBar .sideBar-top .sideBar-icon:first-child {
-  padding-top: 20%;
-  font-size: 25px;
-}
-
-.sideBar .sideBar-bottom {
-  position: absolute;
-  bottom: 3%;
-  left: 8%;
-}
-
-.sideBar .sideBar-icon {
-  padding: 0 18%;
-}
-
-.sideBar .sideBar-icon:not(:first-child) {
-  padding: 0 30%;
-  height: 30px;
-}
-
-/* Menu */
+/* MENU */
 .menu {
-  height: 100vh;
-  width: 16%;
-  margin-left: 4%;
-  background-color: #f4f5f7;
-}
+  height: 100vh !important;
+  z-index: 90;
+  position: fixed;
+  left: 4.6rem;
 
-.menu .account {
+}
+/* .menu .account {
   display: flex;
-  padding: 5% 17%;
+  padding: 5% 15%;
   margin-bottom: 5%;
 }
 
@@ -134,12 +85,12 @@ html body {
 }
 
 .menu .control {
-  padding: 0% 10%;
+  padding: 0% 6%;
   text-align: left;
   margin-bottom: 8%;
-  border-bottom: 2px solid #c4c5c6;
-  margin-left: 8%;
-  margin-right: 8%;
+  border-bottom: 1px solid #c4c5c6;
+  margin-left: 6%;
+  margin-right: 6%;
 }
 
 .menu .control div {
@@ -161,29 +112,29 @@ html body {
 }
 
 .menu .feature {
-  padding: 0% 10%;
+  padding: 0% 6%;
   text-align: left;
   margin-bottom: 8%;
-  margin-left: 7%;
-  margin-right: 7%;
+  margin-left: 6%;
+  margin-right: 5%;
 }
 
 .menu .feature div {
   margin-bottom: 5px;
   padding: 2% 3%;
   cursor: pointer;
-}
+} */
 
-.menu .feature div .svg-inline--fa {
-  margin-right: 5px;
-}
+/* .menu .feature div .svg-inline--fa {
+  margin-right: 4px;
+} */
 
-.menu .feature div span {
+/* .menu .feature div span {
   font-size: 14px;
-}
+} */
 
 .main {
-  padding-left: 2%;
+  padding-left: 3%;
   padding-top: 1%;
 }
 .main .header .breadcrumb {
@@ -344,11 +295,11 @@ html body {
 
 /* Modal Info */
 .modal-info {
-  max-width: 1000px !important;
+  max-width: 1100px !important;
 }
 
 .modal-info .modal-content {
-  padding: 20px 24px;
+  padding: 10px 4px;
 }
 
 .modal-info .modal-content .modal-header {
@@ -406,13 +357,13 @@ html body {
 
 .status .custom-select {
   height: 35px;
-  background: #dcdfe4;
+  background: #f2f3f7;
   margin-bottom: 20px;
 }
 
 .item {
   margin-right: 20px;
-  background: #e9eaf0;
+  background: #f2f3f7;
   padding: 5px;
   border-radius: 5px;
   flex-basis: 50%;
@@ -432,7 +383,7 @@ html body {
 }
 
 .reporter {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .estimate-hours {
@@ -473,3 +424,46 @@ html body {
 .estimate-time {
   font-size: 14px;
 }
+
+/* TABLE */
+.ant-table-thead th {
+  background: rgb(7, 71, 166) !important;
+  color: white !important;
+}
+
+/* RESPONSIVE */
+
+/* MENU */
+@media screen and (max-width: 1000px) {
+  .menu {
+    display: none;
+  }
+}
+
+/* PROJECT - USER - TASK - SIGN IN - SIGN UPV */
+
+@media screen and (max-width: 500px) {
+  .project, .user, .edit-user, .create-project, .edit-project, .create-task, .projectDetail {
+    margin-left: 10%;
+  }
+  .photo-signin{
+    display: none !important;
+  }
+  .content-signin {
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+  }
+}
+@media screen and (max-width: 768px) and (min-width: 1024px) {
+  .photo-signin {
+    display: none !important;
+  }
+  .content-signin {
+    position: absolute;
+    top: 50%;
+    transform: translatey(-50%);
+  }
+}
+
+

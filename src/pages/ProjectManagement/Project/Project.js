@@ -1,25 +1,33 @@
-import { Fragment, React, useEffect } from "react";
+import { Fragment, React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllProject,
   deleteProject,
+  removeUserFromProject,
+  assignUserProject,
 } from "../../../redux/actions/getAllProject";
 import Swal from "sweetalert2";
+import Loading from "../../../_component/Loading/Loading";
 
-
-import { Table, Tag } from "antd";
+import { Table, Tag, Popover, Button, AutoComplete, Avatar } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import EditProject from "../EditProject/EditProject";
+import { getListUser, searchUser } from "../../../redux/actions/User";
 
 export default function Project() {
   const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
   const loading = useSelector((state) => state.getAllProject_Reducer.loading);
+  const { listUser } = useSelector((state) => state.getListUser_Reducer);
+
+  const [value, setState] = useState("");
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllProject());
+    dispatch(getListUser());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  //TABLE
   const columns = [
     {
       title: "ID",
@@ -34,6 +42,9 @@ export default function Project() {
       sorter: {
         compare: (a, b) => a.projectName.localeCompare(b.projectName),
       },
+      render: (text, project) => (
+        <a href={`/projectdetail/${project?.id}`}>{project?.projectName}</a>
+      ),
     },
     {
       title: "Catagory",
@@ -54,16 +65,120 @@ export default function Project() {
     },
     {
       title: "Member",
-      dataIndex: "member",
+      key: "member",
+      render: (text, project) => (
+        <div>
+          {project?.members?.slice(0, 3).map((member) => {
+            return (
+              <Popover
+                key={member.userId}
+                placement="bottom"
+                title="Members"
+                content={() => {
+                  return (
+                    <Fragment>
+                      <table className="table table-borderless">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Avatar</th>
+                            <th>Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {project?.members?.map((member) => {
+                            return (
+                              <tr key={member.userId}>
+                                <td>{member.userId}</td>
+                                <td>
+                                  <Avatar src={member.avatar} />
+                                </td>
+                                <td>{member.name}</td>
+                                <td>
+                                  <Button
+                                    type="primary"
+                                    danger
+                                    shape="circle"
+                                    onClick={() => {
+                                      dispatch(
+                                        removeUserFromProject({
+                                          projectId: project?.id,
+                                          userId: member?.userId,
+                                        })
+                                      );
+                                    }}
+                                  >
+                                    X
+                                  </Button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </Fragment>
+                  );
+                }}
+                trigger="hover"
+              >
+                <Avatar className="mr-1" src={member.avatar} />
+              </Popover>
+            );
+          })}
+          {project?.members?.length > 3 ? (
+            <Avatar className="mr-1">...</Avatar>
+          ) : (
+            ""
+          )}
+          <Popover
+            placement="rightTop"
+            title="Add User"
+            content={() => {
+              return (
+                <AutoComplete
+                  style={{ width: 200 }}
+                  value={value}
+                  onSearch={(value) => {
+                    dispatch(searchUser(value));
+                  }}
+                  options={listUser?.map((user) => {
+                    return { label: user.name, value: user.userId.toString() };
+                  })}
+                  onChange={(value) => setState(value)}
+                  onSelect={(value, option) => {
+                    setState(option.label);
+                    dispatch(
+                      assignUserProject({
+                        projectId: project?.id,
+                        userId: JSON.parse(value),
+                      })
+                    );
+                  }}
+                />
+              );
+            }}
+            trigger="click"
+          >
+            <Button type="primary" shape="circle">
+              +
+            </Button>
+          </Popover>
+        </div>
+      ),
     },
     {
       title: "Action",
       dataIndex: "action",
       render: (text, project) => (
         <Fragment>
-          <NavLink to={`/editproject/${project.id}`} className="text-blue-500 text-xl mr-3">
+          <button
+            className="text-blue-500 text-xl mr-3"
+            onClick={() => {
+              showDrawer(project);
+            }}
+          >
             <EditOutlined />
-          </NavLink>
+          </button>
           <button
             className="text-red-500 text-xl"
             onClick={() => {
@@ -78,7 +193,6 @@ export default function Project() {
   ];
 
   const data = dataProject;
-  console.log(data)
 
   function onChange(pagination, sorter, extra) {
     console.log("params", pagination, sorter, extra);
@@ -96,17 +210,22 @@ export default function Project() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteProject(id))
+        dispatch(deleteProject(id));
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
+  };
 
+  const showDrawer = (project) => {
+    dispatch({ type: "SHOW_DRAWER", project });
   };
 
   return (
-    <div className="w-full p-5">
+    <div className="container-fluid project p-5 md:ml-14 lg:ml-80">
+      {loading ? <Loading /> : ""}
       <p className="text-3xl font-medium">Project Management</p>
       <Table columns={columns} dataSource={data} onChange={onChange} />
+      <EditProject />
     </div>
   );
 }

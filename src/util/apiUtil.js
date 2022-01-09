@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://jiranew.cybersoft.edu.vn/api/",
+  baseURL: "https://jiranew.cybersoft.edu.vn/api/",
 });
 
 const userInfo = localStorage.getItem("USER_LOGIN");

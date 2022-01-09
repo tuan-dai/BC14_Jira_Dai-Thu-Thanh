@@ -10,7 +10,7 @@ export const userLogin = (user, history) => {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Your have Login successfully",
+          title: "Logged in successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -26,7 +26,7 @@ export const userLogin = (user, history) => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "You are not registed!",
+          text: error.response.data.message,
         });
       });
   };

@@ -3,29 +3,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProjectCatagory } from "../../../redux/actions/getProjectCatagory";
 import { Editor } from "@tinymce/tinymce-react";
 import { useFormik } from "formik";
-import { createProject } from "../../../redux/actions/createProject";
-import Swal from "sweetalert2";
+import *as Yup from 'yup';
+import { createProject } from "../../../redux/actions/getAllProject";
+import { NavLink } from "react-router-dom";
+import { EditFilled } from "@ant-design/icons";
 
 export default function CreateProject(props) {
-
     //GET PROJECT CATAGORY
     const projectCatagory = useSelector(
         (state) => state.ProjectCategory_Reducer.data
     );
+
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getProjectCatagory());
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const catagory = () => {
-        return projectCatagory?.map((project) => {
+        return projectCatagory?.map(project => {
             return (
-                <Fragment>
-                    <option key="project.id">{project.projectCategoryName}</option>
+                <Fragment key={project.id}>
+                    <option value={project.id}>{project.projectCategoryName}</option>
                 </Fragment>
             );
         });
     };
+
 
     //CREATE PROJECT
     const formik = useFormik({
@@ -33,37 +36,43 @@ export default function CreateProject(props) {
         initialValues: {
             projectName: "",
             description: "",
-            categoryId: 0,
+            categoryId: projectCatagory?.[0].id,
         },
         onSubmit: (values) => {
             dispatch(createProject(values, props.history))
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Your have create project successfully",
-                showConfirmButton: false,
-                timer: 1500,
-            });
         },
+        validationSchema: Yup.object({
+            projectName: Yup.string().required('*Name is required'),
+        })
     });
-    const { handleChange, handleSubmit, setFieldValue } = formik;
+    const { handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
     const handleEditorChange = (e) => {
-        setFieldValue('description', e.target.getContent())
+        setFieldValue("description", e.target.getContent());
     };
 
     return (
-        <div className="w-full p-5">
-            <p className="text-3xl font-medium">Create Project</p>
+        <div className="create-project container-fluid p-5 md:ml-14 lg:ml-80">
+            <div className="flex items-center gap-3 mb-4">
+                <EditFilled className="text-xl" />
+                <span className="text-3xl font-bold">Create Project</span>
+            </div>
+
             <form onSubmitCapture={handleSubmit}>
                 <div className="form-group">
-                    <label>Name</label>
-                    <input type="text" className="form-control" name="projectName" onChange={handleChange} />
+                    <label className="font-semibold">Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="projectName"
+                        onChange={handleChange}
+                    />
+                    {errors.projectName && touched.projectName && <p className='text-red-500'>{errors.projectName}</p>}
                 </div>
 
                 <div className="form-group">
-                    <label>Description</label>
+                    <label className="font-semibold">Description</label>
                     <Editor
-                        name='description'
+                        name="description"
                         apiKey="oodr1y7pw1cde82eu0y44regjnyo4bqsm26jdn88mduewfyn"
                         initialValue=""
                         init={{
@@ -85,15 +94,13 @@ export default function CreateProject(props) {
                 </div>
 
                 <div className="form-group">
-                    <select className="form-control" >{catagory()}</select>
+                    <select className="form-control">{catagory()}</select>
                 </div>
 
                 <button
-                    className="border-2 border-blue-400 px-2 py-1 hover:bg-blue-400 duration-500 hover:text-white"
-                    type="submit"
-                >
-                    Create project
+                    className="btn btn-primary" type="submit">Create project
                 </button>
+                <NavLink to="/project" className="ml-3 text-black hover:bg-gray-200  px-3 py-2.5 rounded-sm hover:text-black">Cancel</NavLink>
             </form>
         </div>
     );

@@ -4,6 +4,10 @@ import React from "react";
 const initialState = {
   visible: false,
   ComponentContentPopup: <p>Default Content</p>,
+<<<<<<< HEAD
+  id: '',
+=======
+>>>>>>> origin
   callBackSubmit: () => {
     alert("Click demo!");
   },
@@ -12,7 +16,11 @@ const initialState = {
 export const popupReducer = (state = initialState, action) => {
   switch (action.type) {
     case "OPEN_POPUP":
+<<<<<<< HEAD
+      return { ...state, visible: true, id: action.payload };
+=======
       return { ...state, visible: true };
+>>>>>>> origin
 
     case "CLOSE_POPUP":
       return { ...state, visible: false };

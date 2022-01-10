@@ -4,32 +4,40 @@ const initialState = {
   _status: null,
   priority: null,
   description: null,
+  time: null,
   taskType: null,
   userTask: null,
   task: null,
   newTask: null,
   taskDetail: {
-    "priorityTask": {
-      "priorityId": 1,
-      "priority": "High"
+    priorityTask: {
+      priorityId: 1,
+      priority: "High"
     },
-    "taskTypeDetail": {
-      "id": 2,
-      "taskType": "new task"
+    taskTypeDetail: {
+      id: 1,
+      taskType: "bug"
     },
-    "assigness": [],
-    "lstComment": [],
-    "taskId": 2036,
-    "taskName": "start",
-    "alias": "start",
-    "description": "",
-    "statusId": "2",
-    "originalEstimate": 0,
-    "timeTrackingSpent": 0,
-    "timeTrackingRemaining": 0,
-    "typeId": 2,
-    "priorityId": 1,
-    "projectId": 2317
+    assigness: [
+      {
+        id: 827,
+        avatar: "https://ui-avatars.com/api/?name=Tien Do13213",
+        name: "Tien Do13213",
+        alias: "tien-do"
+      }]
+    ,
+    lstComment: [],
+    taskId: 2048,
+    taskName: "hello",
+    alias: "hello",
+    description: "",
+    statusId: "3",
+    originalEstimate: 0,
+    timeTrackingSpent: 0,
+    timeTrackingRemaining: 0,
+    typeId: 1,
+    priorityId: 1,
+    projectId: 2344
   },
 };
 
@@ -51,8 +59,8 @@ const Task_Reducer = (state = initialState, action) => {
       return { ...state, priority: action.priority };
     }
 
-    case ActionType.UPDATE_DESCRIPTION: {
-      return { ...state, description: action.description }
+    case ActionType.UPDATE_TIMETRACKING: {
+      return { ...state, time: action.time }
     }
 
     case ActionType.GETALLTASKTYPE: {
@@ -69,6 +77,10 @@ const Task_Reducer = (state = initialState, action) => {
 
     case ActionType.GETTASKDETAIL: {
       return { ...state, taskDetail: action.taskDetail };
+    }
+
+    case ActionType.UPDATETASK: {
+      return { ...state, taskDetail: action.taskDetail }
     }
 
     default:

@@ -1,6 +1,7 @@
+import { ProfileOutlined } from "@ant-design/icons/lib/icons";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjectDetail } from "../../../../redux/actions/getAllProject";
+import { getProjectDetail } from "../../../../redux/actions/getProjectDetail";
 import Loading from '../../../../_component/Loading/Loading';
 import Content from "./Content";
 import Info from "./Info";
@@ -13,15 +14,18 @@ export default function ProjectDetail(props) {
     useEffect(() => {
         dispatch(getProjectDetail(id))
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    const projectDetail = useSelector(state => state.getAllProject_Reducer.data)
-    console.log(projectDetail)
-    const { loading } = useSelector(state => state.getAllProject_Reducer)
+
+    const { projectDetail } = useSelector(state => state.getProjectDetail_Reducer)
+    const { loading } = useSelector(state => state.getProjectDetail_Reducer)
 
     return (
-
-        <div className="w-full p-5">
+        <div className="projectDetail p-5 container-fluid md:ml-14 lg:ml-80">
             {loading ? <Loading /> : ''}
-            <p className="text-3xl font-medium">Project {projectDetail?.projectName}</p>
+            <div className="flex items-center gap-3 mb-4">
+                <ProfileOutlined className="text-xl" />
+                <span className="text-3xl font-semibold">Project {projectDetail?.projectName}</span>
+            </div>
+
             <Info projectDetail={projectDetail} />
             <Content projectDetail={projectDetail} />
         </div>

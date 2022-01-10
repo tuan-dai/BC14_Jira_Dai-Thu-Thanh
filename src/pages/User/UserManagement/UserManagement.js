@@ -127,7 +127,7 @@ export default function UserManagement() {
       {loading ? <Loading /> : ''}
       <div className="flex items-center gap-3 mb-4">
         <UserOutlined className="text-xl" />
-        <span className="text-3xl font-medium">User Management</span>
+        <span className="text-3xl font-semibold">User Management</span>
       </div>
 
       <Search

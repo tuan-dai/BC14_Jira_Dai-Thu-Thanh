@@ -1,6 +1,8 @@
 import api from "../../util/apiUtil";
-import * as ActionType from "../types/Task";
-import { getAllProject, getProjectDetail } from '../actions/getAllProject'
+import *as ActionType from "../types/Task";
+import { getProjectDetail } from "./getProjectDetail";
+import Swal from "sweetalert2";
+
 
 //GET ALL STATUS
 export const getAllStatus = () => {
@@ -13,13 +15,15 @@ export const getAllStatus = () => {
 };
 
 //UPDATE STATUS
-export const updateStatus = (_status, projectId) => {
+export const updateStatus = (_status, projectId, taskId) => {
   return (dispatch) => {
     api
       .put("Project/updateStatus", _status)
       .then((result) => {
-        dispatch(actUpdateStatus(result.data.content));
-        dispatch(getProjectDetail(projectId))
+        dispatch(actUpdateStatus(result.data.content.content));
+        dispatch(getProjectDetail(projectId));
+        dispatch(getTaskDetail(taskId))
+        dispatch(getAllStatus())
       })
       .catch((error) => console.log(error));
   };
@@ -35,31 +39,6 @@ export const getAllPriority = () => {
   };
 };
 
-//UPDATE PRIORITY
-export const updatePriority = (priority) => {
-  return (dispatch) => {
-    api
-      .put("Project/updatePriority", priority)
-      .then((result) => {
-        dispatch(actUpdatePriority(result.data.content));
-        dispatch(getAllProject());
-      })
-      .catch((error) => console.log(error));
-  };
-};
-
-//UPDATE DESCRIPTION
-export const updateDescription = (description) => {
-  return (dispatch) => {
-    api
-      .put("Project/updateDescription", description)
-      .then((result) => {
-        dispatch(actUpdateDescription(result.data.content));
-        dispatch(getAllProject());
-      })
-      .catch((error) => console.log(error));
-  };
-};
 
 //GET ALL TASKTYPE
 export const getAllTaskType = () => {
@@ -72,26 +51,47 @@ export const getAllTaskType = () => {
 };
 
 //ASSIGN USER TASK
-export const assignUserTask = (userTask) => {
+export const assignUserTask = (userTask, taskId) => {
   return (dispatch) => {
     api
       .post("Project/assignUserTask", userTask)
-      .then((result) =>
+      .then((result) => {
         dispatch(actAssignUserTask(result.data.content.content))
-      )
+        dispatch(getTaskDetail(taskId))
+      })
       .catch((error) => console.log(error));
   };
 };
 
 //REMOVE USER TASK
-export const removeUserTask = (userTask) => {
+export const removeUserTask = (userTask, taskId) => {
   return (dispatch) => {
     api
       .post("Project/removeUserFromTask", userTask)
-      .then((result) =>
+      .then((result) => {
         dispatch(actRemoveUserTask(result.data.content.content))
-      )
-      .catch((error) => console.log(error));
+        dispatch(getTaskDetail(taskId))
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      });
+  };
+};
+
+//CREATE TASK
+export const createTask = (newTask, history) => {
+  return (dispatch) => {
+    api
+      .post("Project/createTask", newTask)
+      .then((result) => {
+        dispatch(actCreateTask(result.data.content.content))
+        setTimeout(() => history.push("/project"), 2000)
+      })
+      .catch((error) => console.log(error.response.message));
   };
 };
 
@@ -102,6 +102,44 @@ export const getTaskDetail = (id) => {
       .get(`Project/getTaskDetail?taskId=${id}`)
       .then((result) => dispatch(actGetTaskDetail(result.data.content)))
       .catch((error) => console.log(error));
+  };
+};
+
+//UPDATE TASK
+export const updateTask = (taskDetail, taskId) => {
+  return (dispatch) => {
+    api
+      .post("Project/updateTask", taskDetail)
+      .then((result) => {
+        dispatch(actUpdateTask(result.data.content.content))
+        dispatch(getTaskDetail(taskId))
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      });
+  };
+};
+
+//REMOVE TASK
+export const removeTask = (id, projectId) => {
+  return (dispatch) => {
+    api
+      .delete(`Project/removeTask?taskId=${id}`)
+      .then((result) => {
+        dispatch(actRemoveTask(result.data.content.content))
+        dispatch(getProjectDetail(projectId))
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      });
   };
 };
 
@@ -126,19 +164,6 @@ const actGetAllPriority = (priority) => {
   };
 };
 
-const actUpdatePriority = (priority) => {
-  return {
-    type: ActionType.UPDATEPRIORITY,
-    priority,
-  };
-};
-
-const actUpdateDescription = (description) => {
-  return {
-    type: ActionType.UPDATE_DESCRIPTION,
-    description,
-  };
-};
 
 const actGetAllTaskType = (taskType) => {
   return {
@@ -161,10 +186,30 @@ const actRemoveUserTask = (userTask) => {
   };
 };
 
+const actCreateTask = (newTask) => {
+  return {
+    type: ActionType.CREATETASK,
+    newTask
+  };
+};
 
 const actGetTaskDetail = (taskDetail) => {
   return {
     type: ActionType.GETTASKDETAIL,
     taskDetail,
+  };
+};
+
+const actUpdateTask = (taskDetail) => {
+  return {
+    type: ActionType.UPDATETASK,
+    taskDetail,
+  };
+};
+
+const actRemoveTask = (task) => {
+  return {
+    type: ActionType.REMOVETASK,
+    task,
   };
 };

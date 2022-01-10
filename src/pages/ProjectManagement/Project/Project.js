@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import Loading from "../../../_component/Loading/Loading";
 
 import { Table, Tag, Avatar, Popover, Button, AutoComplete, Input } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, ProfileOutlined } from "@ant-design/icons";
 import FormEditProject from "../Forms/FormEditProject/FormEditProject";
 import { getListUser, searchUser } from "../../../redux/actions/User";
 import { NavLink } from "react-router-dom";
@@ -63,6 +63,9 @@ export default function Project() {
       sorter: {
         compare: (a, b) => a.projectName.localeCompare(b.projectName),
       },
+      render: (text, project) => (
+        <NavLink to={`/projectdetail/${project.id}`}> {project?.projectName}</NavLink >
+      ),
     },
     {
       title: "Category",
@@ -169,7 +172,7 @@ export default function Project() {
                 );
               }}
               trigger="click">
-              <Button type="primary" shape="circle">+</Button>
+              <Button type="success" shape="circle">+</Button>
             </Popover>
           </div>
         );
@@ -222,7 +225,10 @@ export default function Project() {
   return (
     <div className="container-fluid project p-5 md:ml-14 lg:ml-80">
       {loading ? <Loading /> : ""}
-      <p className="text-3xl font-bold">Project Management</p>
+      <div className="flex items-center gap-3 mb-4">
+        <ProfileOutlined className="text-xl" />
+        <span className="text-3xl font-semibold">Project Management</span>
+      </div>
       <Search
         className="mb-4"
         placeholder="input project name"

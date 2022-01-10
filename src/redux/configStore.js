@@ -8,8 +8,9 @@ import { popupReducer } from "./reducers/popupProject";
 import { projectReducer } from "./reducers/projectReducer";
 import getProjectDetail_Reducer from '../redux/reducers/getProjectDetail';
 import Drawer_Reducer from './reducers/Drawer';
-
 import getListUser_Reducer from "./reducers/User";
+import Task_Reducer from './reducers/Task';
+import Comment_Reducer from './reducers/comment'
 
 const rootReducer = combineReducers({
   getAllProject_Reducer,
@@ -21,9 +22,9 @@ const rootReducer = combineReducers({
   projectReducer,
   getProjectDetail_Reducer,
   Drawer_Reducer,
-
   getListUser_Reducer,
-
+  Task_Reducer,
+  Comment_Reducer,
 
 });
 export default rootReducer;

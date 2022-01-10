@@ -1,12 +1,11 @@
 import React from "react";
 import {
   Drawer,
-  Button,
 } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function PopupProject() {
-  const { visible, ComponentContentPopup, callBackSubmit } = useSelector(
+  const { visible, ComponentContentPopup } = useSelector(
     (state) => state.popupReducer
   );
 

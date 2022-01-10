@@ -36,11 +36,11 @@ export default function EditUser(props) {
 
   return (
     <div className="edit-user p-5 container-fluid md:ml-14 lg:ml-80">
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-8">
         <EditFilled className="text-xl" />
-        <span className="text-3xl font-medium">Edit User</span>
+        <span className="text-3xl font-semibold">Edit User</span>
       </div>
-      <div className="form__editUser lg:-ml-24 xl:ml-0">
+      <div className="form__editUser lg:-ml-24 xl:-ml-16">
         <Form
           labelCol={{
             span: 4,
@@ -53,10 +53,10 @@ export default function EditUser(props) {
           initialValues={{ size: componentSize }}
           onValuesChange={onFormLayoutChange}
           size={componentSize}>
-          <Form.Item label="Name">
+          <Form.Item label={<span className="font-semibold">Name</span>}>
             <Input name="name" value={values.name} onChange={handleChange} />
           </Form.Item>
-          <Form.Item label="Id">
+          <Form.Item label={<span className="font-semibold">Id</span>}>
             <Input
               name="id"
               disabled={true}
@@ -64,18 +64,18 @@ export default function EditUser(props) {
               onChange={handleChange}
             />
           </Form.Item>
-          <Form.Item label="Phone number">
+          <Form.Item label={<span className="font-semibold">Phone number</span>}>
             <Input
               name="phoneNumber"
               value={values.phoneNumber}
               onChange={handleChange}
             />
           </Form.Item>
-          <Form.Item label="Email">
+          <Form.Item label={<span className="font-semibold">Email</span>}>
             <Input name="email" value={values.email} onChange={handleChange} />
           </Form.Item>
 
-          <Form.Item label="Password">
+          <Form.Item label={<span className="font-semibold">Password</span>}>
             <Input.Password
               name="passWord"
               value={values.passWord}
@@ -83,7 +83,7 @@ export default function EditUser(props) {
             />
           </Form.Item>
 
-          <Form.Item label='Action:'>
+          <Form.Item label={<span className="font-semibold">Action</span>}>
             <button type="submit" className="btn btn-primary">
               Submit
             </button>

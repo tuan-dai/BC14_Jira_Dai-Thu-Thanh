@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from "@tinymce/tinymce-react";
-import { Select, Button, Slider } from 'antd';
+import { Select, Slider } from 'antd';
+import Swal from "sweetalert2";
+
 import { getAllProject } from '../../../redux/actions/getAllProject';
 import { getUserProjectId } from '../../../redux/actions/User';
-import { getAllPriority, getAllStatus, getAllTaskType } from '../../../redux/actions/Task';
+import { createTask, getAllPriority, getAllStatus, getAllTaskType } from '../../../redux/actions/Task';
 import { useFormik } from 'formik';
 import *as Yup from 'yup';
-import { createTask } from '../../../redux/actions/createTask';
+import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
+import { OrderedListOutlined } from '@ant-design/icons/lib/icons';
 
 
-export default function CreateTask() {
-    const handleEditorChange = (e) => setFieldValue('description', e.target.getContent());
-    const { _status, priority, taskType } = useSelector(state => state.Task_Reducer)
-
+export default function CreateTask(props) {
     const [timeTracking, setTimeTracking] = useState({
         timeTrackingSpent: 0,
         timeTrackingRemaining: 0
@@ -27,36 +27,40 @@ export default function CreateTask() {
         dispatch(getAllTaskType())
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    //GET ALL PROJECTS
-    const projects = useSelector(state => state.getAllProject_Reducer.data)
+    const handleEditorChange = (e) => setFieldValue('description', e.target.getContent());
+    const { _status, priority, taskType } = useSelector(state => state.Task_Reducer)
+    const { listProject } = useSelector(state => state.getAllProject_Reducer)
+
+    console.log(listProject)
+
+    //GET ALL PROJECTS   
     const projectTable = () => {
-        return projects?.map(project => {
-            return <option key={project?.id} value={project.id}>{project.projectName}</option>
+        return listProject?.map((project, index) => {
+            return <option key={index} value={project?.id}>{project?.projectName}</option>
         })
     }
 
     //GET USER BY PROJECT ID
     const { userProjectId } = useSelector(state => state.getListUser_Reducer)
-    console.log(userProjectId)
 
     //GET ALL STATUS
     const statusTable = () => {
         return _status?.map(item => {
-            return <option key={item.statusId} value={item.statusId}>{item.statusName}</option>
+            return <option key={item?.statusId} value={item?.statusId}>{item?.statusName}</option>
         })
     }
 
     //GET ALL PRIORITY
     const priorityTable = () => {
         return priority?.map(item => {
-            return <option key={item.priorityId} value={item.priorityId}>{item.priority}</option>
+            return <option key={item?.priorityId} value={item?.priorityId}>{item?.priority}</option>
         })
     }
 
     //GET ALL TASKTYPE
     const taskTypeTable = () => {
         return taskType?.map(item => {
-            return <option key={item.id} value={item.id}>{item.taskType}</option>
+            return <option key={item?.id} value={item?.id}>{item?.taskType}</option>
         })
     }
 
@@ -67,32 +71,40 @@ export default function CreateTask() {
             listUserAsign: [],
             taskName: "",
             description: "",
-            status: _status?.[0].statusId,
+            statusId: _status?.[0].statusId,
             originalEstimate: 0,
             timeTrackingSpent: 0,
             timeTrackingRemaining: 0,
-            projectId: projects?.[0].id,
+            projectId: listProject?.[0].id,
             typeId: taskType?.[0].id,
             priorityId: priority?.[0].priorityId
         },
-        onSubmit: values => dispatch(createTask(values)),
+        onSubmit: values => {
+            dispatch(createTask(values, props.history))
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Your have create task successfully",
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        },
         validationSchema: Yup.object({
             taskName: Yup.string().required('Task name is required')
         })
     })
     const { handleSubmit, handleChange, setFieldValue, errors, touched } = formik
 
-
-
-
-
-
     return (
-        <div className="w-full max-h-screen p-5">
-            <p className="text-3xl font-medium">Create Task</p>
+        <div className="create-task max-h-screen p-5 container-fluid md:ml-14 lg:ml-80">
+            <div className='flex items-center gap-3 mb-4'>
+                <OrderedListOutlined className='text-xl' />
+                <span className="text-3xl font-semibold">Create Task</span>
+            </div>
+
             <form onSubmitCapture={handleSubmit}>
                 <div className="form-group">
-                    <label>Project</label>
+                    <label className='font-semibold'>Project</label>
                     <select className="form-control" name='projectId' onChange={e => {
                         dispatch(getUserProjectId(e.target.value))
                         setFieldValue('projectId', e.target.value)
@@ -102,13 +114,13 @@ export default function CreateTask() {
                 </div>
 
                 <div className="form-group">
-                    <label>Task Name</label>
+                    <label className='font-semibold'>Task Name</label>
                     <input className="form-control" name="taskName" onChange={handleChange} />
                     {errors.taskName && touched.taskName && <p className="text-red-500">{errors.taskName}</p>}
                 </div>
 
                 <div className="form-group">
-                    <label>Status</label>
+                    <label className='font-semibold'>Status</label>
                     <select className="form-control" name="status" onChange={handleChange}>
                         {statusTable()}
                     </select>
@@ -116,13 +128,13 @@ export default function CreateTask() {
 
                 <div className="grid grid-cols-2 gap-5">
                     <div className="form-group">
-                        <label>Priority</label>
+                        <label className='font-semibold'>Priority</label>
                         <select className="form-control" name="priorityId" onChange={handleChange} >
                             {priorityTable()}
                         </select>
                     </div>
                     <div className="form-group">
-                        <label>Task Type</label>
+                        <label className='font-semibold'>Task Type</label>
                         <select className="form-control" name="typeId" onChange={handleChange} >
                             {taskTypeTable()}
                         </select>
@@ -131,7 +143,7 @@ export default function CreateTask() {
 
                 <div className="grid grid-cols-2 gap-5">
                     <div className="form-group">
-                        <label>Assignees</label><br />
+                        <label className='font-semibold'>Assignees</label><br />
                         <Select
                             mode="multiple"
                             allowClear
@@ -143,7 +155,7 @@ export default function CreateTask() {
                                     ? userProjectId?.map(user => {
                                         return ({ label: user.name, value: user.userId })
                                     })
-                                    : projects?.[0].members.map(user => { return ({ label: user.name, value: user.userId }) })
+                                    : listProject?.[0].members.map(user => { return ({ label: user.name, value: user.userId }) })
                             }
                             onChange={values => setFieldValue('listUserAsign', values)}
 
@@ -151,9 +163,9 @@ export default function CreateTask() {
                         </Select>
                     </div>
                     <div className="form-group">
-                        <label>Time Tracking</label>
+                        <label className='font-semibold'>Time Tracking</label>
                         <Slider tooltipVisible max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)} value={timeTracking.timeTrackingSpent} />
-                        <div className="flex justify-between font-semibold">
+                        <div className="flex justify-between">
                             <p>{timeTracking.timeTrackingSpent}h logged</p>
                             <p>{timeTracking.timeTrackingRemaining}h remaining</p>
                         </div>
@@ -162,18 +174,18 @@ export default function CreateTask() {
 
                 <div className="grid grid-cols-4 gap-5">
                     <div className="form-group col-span-2">
-                        <label>Original Estimate</label>
+                        <label className='font-semibold'>Original Estimate</label>
                         <input className="form-control" type="number" defaultValue='0' min="0" name="originalEstimate" onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                        <label>Time Spent</label>
+                        <label className='font-semibold'>Time Spent</label>
                         <input className="form-control" type="number" defaultValue="0" min="0" name="timeTrackingSpent" onChange={e => {
                             setTimeTracking({ ...timeTracking, timeTrackingSpent: e.target.value })
                             setFieldValue('timeTrackingSpent', e.target.value)
                         }} />
                     </div>
                     <div className="form-group">
-                        <label>Time Remaining</label>
+                        <label className='font-semibold'>Time Remaining</label>
                         <input className="form-control" type="number" defaultValue="0" min="0" name="timeTrackingRemaining" onChange={e => {
                             setTimeTracking({ ...timeTracking, timeTrackingRemaining: e.target.value })
                             setFieldValue('timeTrackingRemaining', e.target.value)
@@ -182,13 +194,13 @@ export default function CreateTask() {
                 </div>
 
                 <div className="form-group">
-                    <label>Description</label>
+                    <label className='font-semibold'>Description</label>
                     <Editor
                         name="description"
                         apiKey="oodr1y7pw1cde82eu0y44regjnyo4bqsm26jdn88mduewfyn"
                         initialValue=""
                         init={{
-                            height: 500,
+                            height: 200,
                             menubar: false,
                             plugins: [
                                 "advlist autolink lists link image",
@@ -204,8 +216,8 @@ export default function CreateTask() {
                         onChange={handleEditorChange}
                     />
                 </div>
-                <Button className="mr-3">Cancel</Button>
                 <button className="btn btn-primary" type="submit">Create Task</button>
+                <NavLink to="/project" className="ml-3 text-black hover:bg-gray-200  px-3 py-2.5 rounded-sm hover:text-black">Cancel</NavLink>
             </form>
         </div>
     )

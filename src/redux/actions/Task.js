@@ -91,7 +91,13 @@ export const createTask = (newTask, history) => {
         dispatch(actCreateTask(result.data.content.content))
         setTimeout(() => history.push("/project"), 2000)
       })
-      .catch((error) => console.log(error.response.message));
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      });
   };
 };
 

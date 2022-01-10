@@ -19,8 +19,8 @@ export const userLogin = (user, history) => {
         //luu xuong localStorage
         localStorage.setItem("USER_LOGIN", JSON.stringify(result.data));
 
-        //chuyen huong sang trang mainboard
-        setTimeout(() => history.replace("/"), 2000);
+        //chuyen huong sang trang project
+        setTimeout(() => history.replace("/project"), 2000);
       })
       .catch((error) => {
         Swal.fire({

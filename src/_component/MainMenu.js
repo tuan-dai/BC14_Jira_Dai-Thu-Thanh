@@ -21,12 +21,22 @@ export default function MainMenu() {
             Project Management
           </NavLink>
         </div>
+<<<<<<< HEAD
 
         <div className="relative flex items-center rounded-sm hover:bg-gray-200 py-2 my-2">
           <span className="pl-2 text-lg text-left"><i className="fa fa-cog" /></span>
           <NavLink className='absolute left-9 text-black  hover:text-black' to="/createproject">
             Create Project
           </NavLink>
+=======
+        <div>
+          <i className="fa fa-cog" />
+          <NavLink to="/project" className="ml-4 text-black">Project Management</NavLink>
+        </div>
+        <div>
+          <i className="fa fa-cog" />
+          <NavLink to="/createproject" className="ml-4 text-black">Create Project</NavLink>
+>>>>>>> origin
         </div>
 
         <div className="relative flex items-center rounded-sm hover:bg-gray-200 py-2 ">

@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import * as ActionType from "../types/Project";
+=======
+import { DELETEPROJECT } from "../types/deleteProject";
+import { UPDATEPROJECT } from "../types/updateProject";
+import { GETUSER } from "../types/getUser";
+import * as ActionType from "../types/getAllProject";
+>>>>>>> origin
 const initialState = {
   loading: false,
   listProject: null,
   keyword: '',
   error: null,
+  userSearch: [],
 };
 
 const getAllProject_Reducer = (state = initialState, action) => {
@@ -27,6 +35,7 @@ const getAllProject_Reducer = (state = initialState, action) => {
       return { ...state };
     }
 
+<<<<<<< HEAD
     case ActionType.CREATEPROJECT: {
       state.loading = false;
       state.listProject = action.payload;
@@ -41,6 +50,25 @@ const getAllProject_Reducer = (state = initialState, action) => {
     }
 
     case ActionType.DELETEPROJECT: {
+=======
+    case GETUSER: {
+      state.userSearch = action.payload;
+      console.log("StateUser", state);
+      return { ...state };
+    }
+
+    case UPDATEPROJECT: {
+      state.data = state.data.map(project => {
+        if (project.id === action.payload.id) {
+          return action.payload;
+        }
+        return project;
+      });
+      return { ...state };
+    }
+
+    case DELETEPROJECT: {
+>>>>>>> origin
       state.loading = false;
       state.listProject = action.payload;
       state.error = null;

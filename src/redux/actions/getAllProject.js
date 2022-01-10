@@ -71,6 +71,7 @@ export const deleteProject = (id) => {
 };
 
 
+<<<<<<< HEAD
 // REMOVE USER FROM PROJECT
 export const removeUserFromProject = (project) => {
   return (dispatch) => {
@@ -105,6 +106,8 @@ export const assignUserProject = (userProject) => {
   }
 }
 
+=======
+>>>>>>> origin
 const actGetAllProject_Request = () => {
   return {
     type: ActionType.GETALLPROJECT_REQUEST,
@@ -146,6 +149,7 @@ const actDeleteProject = (project) => {
   };
 };
 
+<<<<<<< HEAD
 const actRemoveUserProject = (userProject) => {
   return {
     type: ActionType.REMOVE_USERPROJECT,
@@ -159,3 +163,6 @@ const actAssignUserProject = (userProject) => {
     payload: userProject
   }
 }
+=======
+
+>>>>>>> origin

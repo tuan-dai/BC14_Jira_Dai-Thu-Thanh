@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 import Swal from "sweetalert2";
-=======
->>>>>>> origin
 import api from "../../util/apiUtil";
 import { UPDATEPROJECT } from "../types/updateProject";
 import { getAllProject } from "./getAllProject";
 
-<<<<<<< HEAD
 export const updateProject = (id, project, history) => {
   return (dispatch) => {
     api
@@ -26,19 +22,6 @@ export const updateProject = (id, project, history) => {
       .catch((error) => console.log(error));
   }
 }
-=======
-export const updateProject = (projectUpdate) => {
-  return (dispatch) => {
-    api
-      .put(`Project/updateProject?projectId=${projectUpdate.id}`, projectUpdate)
-      .then((result) => {
-        dispatch(actUpdateProject(result.data.content));
-        dispatch(getAllProject());
-      })
-      .catch((error) => console.log(error));
-  };
-};
->>>>>>> origin
 
 const actUpdateProject = (project) => {
   return {

@@ -165,7 +165,7 @@ export default function CreateTask(props) {
                     <div className="form-group">
                         <label className='font-semibold'>Time Tracking</label>
                         <Slider tooltipVisible max={Number(timeTracking.timeTrackingSpent) + Number(timeTracking.timeTrackingRemaining)} value={timeTracking.timeTrackingSpent} />
-                        <div className="flex justify-between">
+                        <div className="flex justify-between font-semibold">
                             <p>{timeTracking.timeTrackingSpent}h logged</p>
                             <p>{timeTracking.timeTrackingRemaining}h remaining</p>
                         </div>

@@ -36,7 +36,7 @@ export default function EditUser(props) {
 
   return (
     <div className="edit-user p-5 container-fluid md:ml-14 lg:ml-80">
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-4">
         <EditFilled className="text-xl" />
         <span className="text-3xl font-semibold">Edit User</span>
       </div>

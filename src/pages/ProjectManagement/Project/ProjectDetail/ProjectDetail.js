@@ -16,6 +16,7 @@ export default function ProjectDetail(props) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const { projectDetail } = useSelector(state => state.getProjectDetail_Reducer)
+    console.log(projectDetail)
     const { loading } = useSelector(state => state.getProjectDetail_Reducer)
 
     return (

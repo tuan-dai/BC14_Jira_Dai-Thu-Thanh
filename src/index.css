@@ -47,17 +47,10 @@ html body {
 
 /* MENU */
 .menu {
-<<<<<<< HEAD
   height: 100vh !important;
   z-index: 90;
   position: fixed;
   left: 4.6rem;
-=======
-  height: 100vh;
-  width: 16%;
-  background-color: #f4f5f7;
-}
->>>>>>> origin
 
 }
 /* .menu .account {

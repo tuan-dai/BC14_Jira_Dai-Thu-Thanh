@@ -34,7 +34,7 @@ export default function Content(props) {
         return <Droppable key={index} droppableId={task.statusId}>
           {(provided) => {
             return <div key={index} className="min-w-full h-auto mr-4 mt-5 bg-gray-100 shadow-md" >
-              <div className="p-3 font-semibold text-gray-600">{task.statusName}</div>
+              <div className="p-3">{task.statusName}</div>
               <div className="list-group list-group-flush" ref={provided.innerRef} {...provided.droppableProps}>
                 {task?.lstTaskDeTail?.map((taskDetail, index) => {
                   return <Draggable key={taskDetail?.taskId.toString()} index={index} draggableId={JSON.stringify({ taskId: taskDetail?.taskId, projectId: taskDetail?.projectId })}>

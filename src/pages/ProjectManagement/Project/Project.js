@@ -9,7 +9,6 @@ import {
 import Swal from "sweetalert2";
 import Loading from "../../../_component/Loading/Loading";
 
-<<<<<<< HEAD
 import { Table, Tag, Avatar, Popover, Button, AutoComplete, Input } from "antd";
 import { EditOutlined, DeleteOutlined, ProfileOutlined } from "@ant-design/icons";
 import FormEditProject from "../Forms/FormEditProject/FormEditProject";
@@ -19,38 +18,10 @@ import { SEARCHPROJECT } from "../../../redux/types/Project";
 
 export default function Project() {
   const [value, setState] = useState("");
-=======
-import { Table, Tag, Avatar, Popover, Button, AutoComplete } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import FormEditProject from "../Forms/FormEditProject/FormEditProject";
-import { assignUserProject, getUser, deleteUserProject } from "../../../redux/actions/getUser";
-// const mockVal = (str, repeat) => ({
-//   value: str.repeat(repeat),
-// });
-
-export default function Project() {
-  const dataProject = useSelector((state) => state.getAllProject_Reducer.data);
-  // const loading = useSelector((state) => state.getAllProject_Reducer.loading);
-  const userSearch = useSelector(
-    (state) => state.getAllProject_Reducer.userSearch
-  );
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState(userSearch);
-  const onSearch = (searchText) => {
-    setOptions(
-      userSearch.filter((user) => user.name.indexOf(searchText) !== -1)
-    );
-  };
-
-  const onChange = (data) => {
-    setValue(data);
-  };
->>>>>>> origin
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllProject());
-<<<<<<< HEAD
     dispatch(getListUser());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -77,14 +48,6 @@ export default function Project() {
   //TABLE
   const newArr = listProject?.filter(project => project?.projectName?.toLowerCase().indexOf(keyword.toLowerCase()) !== -1)
   const data = newArr
-=======
-    dispatch(getUser());
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    setOptions(userSearch);
-  }, [userSearch]);
->>>>>>> origin
 
   const columns = [
     {
@@ -126,7 +89,6 @@ export default function Project() {
     {
       title: "Members",
       key: "members",
-<<<<<<< HEAD
       render: (text, project, index) => {
         return (
           <div>
@@ -139,20 +101,6 @@ export default function Project() {
                   content={() => {
                     return (
                       <table className="table table-borderless">
-=======
-      render: (text, record, index) => {
-        return (
-          <div>
-            {record.members?.slice(0, 3).map((member, index) => {
-              return (
-                <Popover
-                  key={index}
-                  placement="top"
-                  title={"Members"}
-                  content={() => {
-                    return (
-                      <table className="table">
->>>>>>> origin
                         <thead>
                           <tr>
                             <th>ID</th>
@@ -163,7 +111,6 @@ export default function Project() {
                           </tr>
                         </thead>
                         <tbody>
-<<<<<<< HEAD
                           {project?.members?.map((item, index) => {
                             return (
                               <tr key={index}>
@@ -182,37 +129,6 @@ export default function Project() {
                                       }));
                                     }}
                                   >X</Button>
-=======
-                          {record.members?.map((item, index) => {
-                            return (
-                              <tr key="index">
-                                <td>{item.userId}</td>
-                                <td>
-                                  <img
-                                    src={item.avatar}
-                                    width="30"
-                                    height="50"
-                                    style={{ borderRadius: "15px" }}
-                                    alt=""
-                                  />
-                                </td>
-                                <td>{item.name}</td>
-                                <td>
-                                  <button
-                                    onClick={() => {
-                                      dispatch(
-                                        deleteUserProject({
-                                          projectId: record.id,
-                                          userId: item.userId,
-                                        })
-                                      );
-                                    }}
-                                    className="btn btn-danger"
-                                    style={{ borderRadius: "50%" }}
-                                  >
-                                    <DeleteOutlined />
-                                  </button>
->>>>>>> origin
                                 </td>
                               </tr>
                             );
@@ -222,7 +138,6 @@ export default function Project() {
                     );
                   }}
                 >
-<<<<<<< HEAD
                   <Avatar className="mr-1" key={index} src={member.avatar} />
                 </Popover>
               );
@@ -258,48 +173,6 @@ export default function Project() {
               }}
               trigger="click">
               <Button type="success" shape="circle">+</Button>
-=======
-                  <Avatar key={index} src={member.avatar} />
-                </Popover>
-              );
-            })}
-            {record.members?.length > 3 ? <Avatar>...</Avatar> : ""}
-
-            <Popover
-              placement="topLeft"
-              title={"Add member"}
-              onVisibleChange={() => setValue("")}
-              content={() => {
-                return (
-                  <AutoComplete
-                    options={options.map((user, index) => {
-                      return {
-                        value: user.userId.toString(),
-                        label: user.name,
-                      };
-                    })}
-                    value={console.log(value) || value}
-                    onChange={(data) => {
-                      setValue(data);
-                    }}
-                    onSelect={(data, value) => {
-                      setValue("");
-                      dispatch(
-                        assignUserProject({
-                          projectId: record.id,
-                          userId: data,
-                        })
-                      );
-                    }}
-                    style={{ width: "100%" }}
-                    onSearch={onSearch}
-                  />
-                );
-              }}
-              trigger="click"
-            >
-              <Button style={{ borderRadius: "50%" }}>+</Button>
->>>>>>> origin
             </Popover>
           </div>
         );
@@ -308,41 +181,19 @@ export default function Project() {
     {
       title: "Action",
       dataIndex: "action",
-      render: (text, record, project) => (
+      render: (text, project) => (
         <Fragment>
           <button
-<<<<<<< HEAD
             type="button"
             className="text-blue-500 text-xl mr-3 focus:outline-none"
             onClick={() => dispatch({ type: 'SHOW_DRAWER', payload: project })}
-=======
-            className="text-blue-500 text-xl mr-3"
-            onClick={() => {
-              const action = {
-                type: "OPEN_FORM_EDIT_PROJECT",
-                Component: <FormEditProject />,
-              };
-
-              //dispatch len reducer noi dung trong modal
-              dispatch(action);
-
-              //dispatch du lieu hien tai len reducer
-
-              const actionEditProject = {
-                type: "EDIT_PROJECT",
-                projectEditModel: record,
-              };
-
-              dispatch(actionEditProject);
-            }}
->>>>>>> origin
           >
             <EditOutlined />
           </button>
           <button
             className="text-red-500 text-xl focus:outline-none"
             onClick={() => {
-              delete_Project(record.id);
+              delete_Project(project.id);
             }}
           >
             <DeleteOutlined />
@@ -352,11 +203,6 @@ export default function Project() {
     },
   ];
 
-<<<<<<< HEAD
-=======
-  const data = dataProject;
-  console.log(data);
->>>>>>> origin
 
   //DELETE PROJECT
   const delete_Project = (id) => {

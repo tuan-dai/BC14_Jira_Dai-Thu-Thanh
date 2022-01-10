@@ -24,6 +24,9 @@ export default function InfoModal() {
   const { taskType } = useSelector((state) => state.Task_Reducer);
   const { projectDetail } = useSelector(state => state.getProjectDetail_Reducer)
 
+  console.log(projectDetail)
+
+
   const myRef = useRef(null)
 
   const renderTaskType = () => {

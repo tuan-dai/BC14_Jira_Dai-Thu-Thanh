@@ -1,5 +1,5 @@
 import api from "../../util/apiUtil";
-import *as ActionType from "../types/Task";
+import * as ActionType from "../types/Task";
 import { getProjectDetail } from "./getProjectDetail";
 import Swal from "sweetalert2";
 

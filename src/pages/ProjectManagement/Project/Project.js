@@ -160,7 +160,7 @@ export default function Project(props) {
                     }}
                     options={listUser
                       ?.filter((user) => {
-                        return !listUserIdProject.includes(user.userId);
+                        return !listUserIdProject?.includes(user.userId);
                       })
                       .map((user) => {
                         return {

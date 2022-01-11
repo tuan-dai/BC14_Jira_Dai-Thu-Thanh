@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <PopupProject /> ;; lưu file chị oi
+        {/* <PopupProject /> ;
 
         */}
         <Switch>

@@ -15,7 +15,7 @@ export const JiraTemplate = (props) => {
             {localStorage.getItem('USER_LOGIN')
               ? <Redirect to='/project' />
               : <Redirect to='/signin' />}
-            <Component {...propsRoute} />
+            <Component {...propsRoute} /> 
           </div>
         );
       }}

@@ -10,7 +10,6 @@ import Project from "./pages/ProjectManagement/Project/Project";
 import ProjectDetail from './pages/ProjectManagement/Project/ProjectDetail/ProjectDetail'
 import { UserTemplate } from "./templates/UserTemplate";
 import CreateProject from "./pages/ProjectManagement/CreateProject/CreateProject";
-import PopupProject from "./pages/ProjectManagement/PopupProject/PopupProject";
 import CreateTask from './pages/Task Management/CreateTask/CreateTask';
 import PageNotFound from './pages/PageNotFound/PageNotFound'
 
@@ -18,11 +17,15 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <PopupProject /> */}
+        {/* <PopupProject /> ;; lưu file chị oi
+
+        */}
         <Switch>
           <UserTemplate path="/signin" exact Component={SignIn} />
 
+          <JiraTemplate path="/" exact Component={Project} />
           <JiraTemplate path="/project" exact Component={Project} />
+
           <JiraTemplate path="/createproject" exact Component={CreateProject} />
 
           <JiraTemplate path="/user-management" exact Component={UserManagement} />

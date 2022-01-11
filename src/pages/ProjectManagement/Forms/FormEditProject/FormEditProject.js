@@ -47,7 +47,9 @@ export default function FormEditProject(props) {
         title="Edit project"
         width={720}
         visible={visible}
+        onClose={onClose}
         bodyStyle={{ paddingBottom: 80 }}>
+          
 
         <form onSubmitCapture={handleSubmit}>
           <div className="form-group">

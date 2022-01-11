@@ -16,7 +16,7 @@ import { getListUser, searchUser } from "../../../redux/actions/User";
 import { NavLink } from "react-router-dom";
 import { SEARCHPROJECT } from "../../../redux/types/Project";
 
-export default function Project() {
+export default function Project(props) {
   const [value, setState] = useState("");
 
   const dispatch = useDispatch();
@@ -90,6 +90,9 @@ export default function Project() {
       title: "Members",
       key: "members",
       render: (text, project, index) => {
+        const listUserIdProject = project?.members?.map((item) => {
+          return item.userId;
+        });
         return (
           <div>
             {project?.members?.slice(0, 3).map((member, index) => {
@@ -155,12 +158,22 @@ export default function Project() {
                     onSearch={(value) => {
                       dispatch(searchUser(value))
                     }}
-                    options={listUser?.map((user) => {
-                      return { label: user.name, value: user.userId.toString() };
-                    })}
+                    options={listUser
+                      ?.filter((user) => {
+                        return !listUserIdProject.includes(user.userId);
+                      })
+                      .map((user) => {
+                        return {
+                          label: user.name,
+                          value: user.userId.toString(),
+                        };
+                      })}
+                    onFocus={() => {
+                      dispatch(searchUser(value))
+                    }}
                     onChange={(value) => setState(value)}
                     onSelect={(value, option) => {
-                      setState(option.label);
+                      setState("");
                       dispatch(
                         assignUserProject({
                           projectId: project?.id,
@@ -242,7 +255,7 @@ export default function Project() {
       />
 
       <Table columns={columns} dataSource={data} />
-      <FormEditProject />
+      <FormEditProject {...props} />
     </div>
   );
 }
